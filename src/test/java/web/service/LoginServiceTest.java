@@ -25,28 +25,32 @@ public class LoginServiceTest {
     public void testLoginSuccess() {
         // Test login with valid credentials
         login("ahsan", "ahsan_pass", "01/01/2002");
-        Assert.assertEquals("success", driver.getTitle());
+        String bodyText = driver.findElement(By.tagName("body")).getText();
+        Assert.assertTrue(bodyText.contains("Login Status: Success"));
     }
 
     @Test
     public void testLoginFailureInvalidCredentials() {
         // Test login with invalid credentials
-        login("invalid_user", "invalid_password", "01/01/2002");
-        Assert.assertNotEquals("success", driver.getTitle());
+    	login("invalid_user", "invalid_password", "01/01/2002");
+    	String bodyText = driver.findElement(By.tagName("body")).getText();
+        Assert.assertTrue(bodyText.contains("Login Status: Fail"));
     }
 
     @Test
     public void testLoginFailureInvalidDOB() {
         // Test login with invalid date of birth
-        login("ahsan", "ahsan_pass", "01/01/2024");
-        Assert.assertNotEquals("success", driver.getTitle());
+    	login("ahsan", "ahsan_pass", "01/01/2024");
+    	String bodyText = driver.findElement(By.tagName("body")).getText();
+        Assert.assertTrue(bodyText.contains("Login Status: Fail"));
     }
 
     @Test
     public void testLoginFailureEmptyFields() {
         // Test login with empty fields
-        login("", "", "");
-        Assert.assertNotEquals("success", driver.getTitle());
+    	login("", "", "");
+    	String bodyText = driver.findElement(By.tagName("body")).getText();
+        Assert.assertTrue(bodyText.contains("Login Status: Fail"));
     }
 
     // Helper method to perform login

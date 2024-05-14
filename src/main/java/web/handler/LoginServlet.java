@@ -32,16 +32,37 @@ public class LoginServlet extends HttpServlet {
 
         System.out.println("Username/password: " + username + ", " + password);
 
-        boolean loginStatus = LoginService.login(username, password, dob);
+        boolean loginStatus = false;
 
-        // Set response content type to JSON
-        resp.setContentType("application/json");
+        // Check if the date of birth is not empty before invoking the login service
+        if (!dob.isEmpty()) {
+            loginStatus = LoginService.login(username, password, dob);
+        }
 
-        // Create a JSON response
-        String jsonResponse = "{\"status\": \"" + (loginStatus ? "success" : "fail") + "\"}";
+        // Set response content type to HTML
+        resp.setContentType("text/html");
 
-        // Write the JSON response to the PrintWriter
+        // Generate HTML response
+        String htmlResponse = "<!DOCTYPE html>\n" +
+                "<html lang=\"en\">\n" +
+                "<head>\n" +
+                "    <meta charset=\"UTF-8\">\n" +
+                "    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n" +
+                "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n" +
+                "    <title>Login Response</title>\n" +
+                "</head>\n" +
+                "<body>\n" +
+                "<h1>Login Status: " + (loginStatus ? "Success" : "Fail") + "</h1>\n" +
+                "</body>\n" +
+                "</html>";
+
+        // Write the HTML response to the PrintWriter
         PrintWriter writer = resp.getWriter();
-        writer.println(jsonResponse);
+        writer.println(htmlResponse);
+        writer.flush(); // Flush the writer to ensure the response is sent
     }
+
+
+
+
 }

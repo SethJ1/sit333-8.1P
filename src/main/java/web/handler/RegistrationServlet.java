@@ -9,39 +9,37 @@ import javax.servlet.http.HttpServletResponse;
 
 import web.service.RegistrationService;
 
-
 /**
  * HTTP end-point to handle registration request.
  */
-public class RegistrationServlet  extends HttpServlet{
+public class RegistrationServlet extends HttpServlet {
 
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {	
-		System.out.println("[RegistrationServlet] GET");
-		
-		doPost(req, resp);
-	}
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        System.out.println("[RegistrationServlet] GET");
 
-	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {		
-		System.out.println("[RegistrationServlet] POST");
-		
-		String fName = req.getParameter("fname");
-		String lName = req.getParameter("lname");
-		String email = req.getParameter("email");
-		String dob = req.getParameter("dob");
-		
-		// Call registration business logic
-		//
-		RegistrationService.register(fName, lName, email, dob);
-		
-		// Writes a status ok message: just to test servlet functionality.
-		//
-		resp.setContentType("application/json");
-		resp.setStatus(HttpServletResponse.SC_OK);				
-		resp.getWriter().println("{\"status\": \"ok\"}");
-		
-	}
+        doPost(req, resp);
+    }
 
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        System.out.println("[RegistrationServlet] POST");
 
+        String fName = req.getParameter("fname");
+        String lName = req.getParameter("lname");
+        String email = req.getParameter("email");
+        String dob = req.getParameter("dob");
+
+        // Call registration business logic
+        boolean registrationStatus = RegistrationService.register(fName, lName, email, dob);
+
+        // Set response content type to JSON
+        resp.setContentType("application/json");
+
+        // Generate JSON response
+        String jsonResponse = "{\"status\": \"" + (registrationStatus ? "success" : "fail") + "\"}";
+
+        // Write the JSON response
+        resp.getWriter().println(jsonResponse);
+    }
 }

@@ -18,17 +18,19 @@ public class LoginService {
      * @return true if the login is successful, false otherwise.
      */
     public static boolean login(String username, String password, String dob) {
+    	// Check if emtpy
+        if (dob.isEmpty()) {
+            return false;
+        }
+    	
         // Retrieve the current date
         LocalDate currentDate = LocalDate.now();
 
         // Parse the date of birth string to LocalDate object
         LocalDate dobDate = LocalDate.parse(dob);
 
-        // Assuming a minimum age requirement for login, e.g., 18 years
-        LocalDate minAllowedDob = currentDate.minusYears(18);
-
-        // Check if the username and password match and the user is of legal age
-        if ("ahsan".equals(username) && "ahsan_pass".equals(password) && dobDate.isBefore(minAllowedDob)) {
+        // Check if the username, password and dob match
+        if ("ahsan".equals(username) && "ahsan_pass".equals(password) && dobDate.equals(LocalDate.of(2002, 1, 1))) {
             return true; // Authentication successful
         }
 
